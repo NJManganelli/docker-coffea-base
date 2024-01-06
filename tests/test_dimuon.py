@@ -74,16 +74,17 @@ def test_processor_dimu_mass():
     #apply_to_fileset introduces the dataset key to results dictionary
     computable = apply_to_fileset(
         MyProcessor(),
-        available_fileset,
+        # available_fileset,
+        fileset,
         schemaclass=BaseSchema,
     )
     
-    import uproot
-    for dataset, dc in fileset.items():
-        print(dataset)
-        for f in dc['files'].keys():
-            of = uproot.open(f)["Events"]
-            print(of.keys())
+    # import uproot
+    # for dataset, dc in fileset.items():
+    #     print(dataset)
+    #     for f in dc['files'].keys():
+    #         of = uproot.open(f)["Events"]
+    #         print(of.keys())
             
-    # out, = dask.compute(computable, scheduler="sync")
-    # assert out["DoubleMuon"]["entries"] == 1000560
+    out, = dask.compute(computable, scheduler="sync")
+    assert out["DoubleMuon"]["entries"] == 1000560
