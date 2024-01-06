@@ -25,8 +25,13 @@ RUN mamba install --yes \
       ipympl \
       dask_labextension \
       ca-policy-lcg \
-      xrootd\
+      xrootd \
+      fsspec \
+      fsspec-xrootd \
       "uproot>=5.2.1" \
+      "awkward>=2.5.1" \
+      awkward-pandas \
+      pyarrow \
       "dask[array]>=2023.12.1" \
       "dask-awkward>=2024.1.0" \
       "dask-histogram>=2023.10.0" \
@@ -45,11 +50,12 @@ RUN mamba install --yes \
       tritonclient[all] \
       torch \
       tflite-runtime \
-      onnxruntime \
-    && pip install --no-cache-dir \
-      torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
-     && pip install --no-cache-dir \
-      torch-geometric
+      onnxruntime
+    #   onnxruntime \
+    # && pip install --no-cache-dir \
+    #   torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
+    #  && pip install --no-cache-dir \
+    #   torch-geometric
 
 # Make a symbolic link between installation /opt/conda/etc/grid-security and actual directory /etc/grid-security
 RUN ln -s /usr/local/etc/grid-security /etc/grid-security
