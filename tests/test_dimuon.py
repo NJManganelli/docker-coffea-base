@@ -1,7 +1,9 @@
 import awkward as ak
 import hist
+from hist.dask import Hist
 import gzip
 import json
+import dask
 from distributed import Client
 from coffea import processor
 from coffea.nanoevents.methods import candidate
@@ -41,7 +43,7 @@ class MyProcessor(processor.ProcessorABC):
         )
 
         h_mass = (
-            hist.dask.Hist.new
+            Hist.new
             .StrCat(["opposite", "same"], name="sign")
             .Log(1000, 0.2, 200., name="mass", label="$m_{\mu\mu}$ [GeV]")
             .Int64()
