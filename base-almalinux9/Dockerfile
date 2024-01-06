@@ -1,27 +1,29 @@
-FROM condaforge/mambaforge:23.3.1-1
+FROM almalinux:9
 
 ARG python
 ARG release
 
 ENV PYTHON_VERSION=${python}
 
-ENV DEBIAN_FRONTEND="noninteractive"
-ENV TZ="Etc/UTC"
-
-RUN apt-get update \
-     && apt-get install -yq --no-install-recommends libarchive-dev zsh \
-     && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN yum -y update \
+     && yum --allowerasing -y install git curl bzip2 libgfortran which zsh \
+     && curl -sSL https://github.com/conda-forge/miniforge/releases/download/23.3.1-1/Mambaforge-Linux-x86_64.sh -o /tmp/mambaforge.sh \
+     && bash /tmp/mambaforge.sh -bfp /usr/local \
+     && rm -rf /tmp/mambaforge.sh \
+     && mamba update mamba \
+     && mamba clean --all --yes \
+     && rpm -e --nodeps curl bzip2 \
+     && yum clean all
 
 # XRootD + CA + VOMS + Coffea
 RUN mamba install --yes \
-      -c conda-forge \
+      -c conda-forge -c pytorch \
       python=${PYTHON_VERSION} \
       gxx \
       voms \
       jupyterlab \
       ipympl \
       dask_labextension \
-      python=${PYTHON_VERSION} \
       ca-policy-lcg \
       xrootd \
       fsspec \
@@ -55,4 +57,4 @@ RUN mamba install --yes \
       torch-geometric
 
 # Make a symbolic link between installation /opt/conda/etc/grid-security and actual directory /etc/grid-security
-RUN ln -s /opt/conda/etc/grid-security /etc/grid-security
+RUN ln -s /usr/local/etc/grid-security /etc/grid-security

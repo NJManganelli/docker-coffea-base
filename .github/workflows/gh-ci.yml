@@ -9,10 +9,11 @@ on:
   pull_request:
 
 env:
-  DOCKER_ORG: coffeateam
+  # DOCKER_ORG: coffeateam
+  DOCKER_ORG: nmangane
   GITHUB_SHA: ${{ github.sha }}
   GITHUB_REF: ${{ github.ref }}
-  release: "0.7.22"
+  release: "2023.12.0"
 
 jobs:
 
@@ -20,17 +21,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_dir: [base, base-cc7, base-almalinux8]
-        python: ["3.8", "3.9", "3.10"]
+        image_dir: [base, base-cc7, base-almalinux8, base-almalinux9]
+        python: ["3.8", "3.9", "3.10", "3.11"]
         exclude:
           - image_dir: base-cc7
             python: 3.8
           - image_dir: base-almalinux8
             python: 3.8
+          - image_dir: base-almalinux9
+            python: 3.8
           - image_dir: base-cc7
             python: 3.9
           - image_dir: base-almalinux8
             python: 3.9
+          - image_dir: base-almalinux9
+            python: 3.9
+          - image_dir: base-cc7
+            python: 3.10
+          - image_dir: base-almalinux8
+            python: 3.10
+          - image_dir: base-almalinux9
+            python: 3.10
     name: ${{ matrix.image_dir }}-${{ matrix.python }}
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +78,7 @@ jobs:
         image_dir: ${{ matrix.image_dir }}
         python: ${{ matrix.python }}
       run: |
-        image="coffeateam/coffea-${image_dir}"
+        image="nmangane/coffea-${image_dir}"
 
         tag="${image}:${release}-py${python}"
         tags=${image}:latest-py${python},$tag
@@ -125,14 +136,14 @@ jobs:
           release=${{ env.release }}
 
 
-    - name: Send dispatch event downstream
-      if: ${{  github.event_name == 'push' }}
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
-        repository: CoffeaTeam/docker-coffea-dask
-        event-type: coffea-${{ matrix.image_dir }}
-        client-payload: '{"ref": "${{ github.ref }}", "python": "py${{ matrix.python }}", "image": "${{ matrix.image_dir }}", "image_tag": "${{ steps.tags.outputs.tag }}"}'
+    # - name: Send dispatch event downstream
+    #   if: ${{  github.event_name == 'push' }}
+    #   uses: peter-evans/repository-dispatch@v1
+    #   with:
+    #     token: ${{ secrets.REPO_ACCESS_TOKEN }}
+    #     repository: CoffeaTeam/docker-coffea-dask
+    #     event-type: coffea-${{ matrix.image_dir }}
+    #     client-payload: '{"ref": "${{ github.ref }}", "python": "py${{ matrix.python }}", "image": "${{ matrix.image_dir }}", "image_tag": "${{ steps.tags.outputs.tag }}"}'
 
 
     #- name: Make sure voms tools are working

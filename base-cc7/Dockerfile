@@ -6,7 +6,7 @@ ARG release
 ENV PYTHON_VERSION=${python}
 
 RUN yum -y update \
-     && yum -y install git curl bzip2 libgfortran which zsh \
+     && yum --allowerasing -y install git curl bzip2 libgfortran which zsh \
      && curl -sSL https://github.com/conda-forge/miniforge/releases/download/23.3.1-1/Mambaforge-Linux-x86_64.sh -o /tmp/mambaforge.sh \
      && bash /tmp/mambaforge.sh -bfp /usr/local \
      && rm -rf /tmp/mambaforge.sh \
@@ -26,7 +26,15 @@ RUN mamba install --yes \
       dask_labextension \
       ca-policy-lcg \
       xrootd \
-      "uproot>=4.0.8" \
+      fsspec \
+      fsspec-xrootd \
+      "uproot>=5.2.1" \
+      "awkward>=2.5.1" \
+      awkward-pandas \
+      pyarrow \
+      "dask[array]>=2023.12.1" \
+      "dask-awkward>=2024.1.0" \
+      "dask-histogram>=2023.10.0" \
       numpy \
       coffea=${release} \
       vector xgboost \
@@ -38,12 +46,12 @@ RUN mamba install --yes \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
       --extra-index-url https://google-coral.github.io/py-repo/ \
-      fastjet==3.4.0.1 \
+      fastjet==3.4.1.3 \
       tritonclient[all] \
-      "torch<1.13" \
+      torch \
       tflite-runtime \
       onnxruntime \
-    && pip install --no-cache-dir \
+     && pip install --no-cache-dir \
       torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
      && pip install --no-cache-dir \
       torch-geometric
