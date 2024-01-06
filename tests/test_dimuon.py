@@ -69,7 +69,7 @@ class MyProcessor(processor.ProcessorABC):
 def test_processor_dimu_mass():
     
     with Client() as _:
-        available_fileset, updated_fileset = preprocess(fileset, maybe_step_size=10000, skip_bad_files=True)
+        available_fileset, updated_fileset = preprocess(fileset, maybe_step_size=100000, skip_bad_files=True)
 
         #apply_to_fileset introduces the dataset key to results dictionary
         computable = apply_to_fileset(
@@ -79,5 +79,4 @@ def test_processor_dimu_mass():
         )
     
         out, = dask.compute(computable)
-        # assert out["DoubleMuon"]["entries"] == 1000560
-        return 0
+        assert out["DoubleMuon"]["entries"] == 1000560
