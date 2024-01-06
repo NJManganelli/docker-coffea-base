@@ -58,12 +58,12 @@ jobs:
       with:
         driver: docker
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
-      if: github.event_name == 'push'
-      with:
-        username: ${{ secrets.DOCKERHUB_ACCOUNT }}
-        password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+    # - name: Login to DockerHub
+    #   uses: docker/login-action@v1
+    #   if: github.event_name == 'push'
+    #   with:
+    #     username: ${{ secrets.DOCKERHUB_ACCOUNT }}
+    #     password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
     #- name: Login to GitHub Container Registry
     #  uses: docker/login-action@v1
@@ -124,27 +124,27 @@ jobs:
         docker run --rm -v ${{ github.workspace }}:/tmp/workspace ${tag} \
         sh -c "pip install -U pytest && cd tmp/workspace && pytest"
 
-    - name: Build and push
-      uses: docker/build-push-action@v5
-      with:
-        context: ${{ matrix.image_dir }}
-        file: ${{ matrix.image_dir }}/Dockerfile
-        platforms: linux/amd64
-        push: ${{  github.event_name == 'push' }}
-        tags: ${{ steps.tags.outputs.tags }}
-        build-args: |
-          python=${{ matrix.python }}
-          release=${{ env.release }}
+    # - name: Build and push
+    #   uses: docker/build-push-action@v5
+    #   with:
+    #     context: ${{ matrix.image_dir }}
+    #     file: ${{ matrix.image_dir }}/Dockerfile
+    #     platforms: linux/amd64
+    #     push: ${{  github.event_name == 'push' }}
+    #     tags: ${{ steps.tags.outputs.tags }}
+    #     build-args: |
+    #       python=${{ matrix.python }}
+    #       release=${{ env.release }}
 
 
-    - name: Send dispatch event downstream
-      if: ${{  github.event_name == 'push' }}
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
-        repository: CoffeaTeam/docker-coffea-dask
-        event-type: coffea-${{ matrix.image_dir }}
-        client-payload: '{"ref": "${{ github.ref }}", "python": "py${{ matrix.python }}", "image": "${{ matrix.image_dir }}", "image_tag": "${{ steps.tags.outputs.tag }}"}'
+    # - name: Send dispatch event downstream
+    #   if: ${{  github.event_name == 'push' }}
+    #   uses: peter-evans/repository-dispatch@v1
+    #   with:
+    #     token: ${{ secrets.REPO_ACCESS_TOKEN }}
+    #     repository: CoffeaTeam/docker-coffea-dask
+    #     event-type: coffea-${{ matrix.image_dir }}
+    #     client-payload: '{"ref": "${{ github.ref }}", "python": "py${{ matrix.python }}", "image": "${{ matrix.image_dir }}", "image_tag": "${{ steps.tags.outputs.tag }}"}'
 
 
     #- name: Make sure voms tools are working
