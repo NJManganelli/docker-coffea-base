@@ -1,4 +1,4 @@
-FROM almalinux:8
+FROM almalinux:9
 
 ARG python
 ARG release
@@ -27,6 +27,9 @@ RUN mamba install --yes \
       ca-policy-lcg \
       xrootd\
       "uproot>=5.2.1" \
+      "dask[array]>=2023.12.1" \
+      "dask-awkward>=2024.1.0" \
+      "dask-histogram>=2023.10.0" \
       numpy \
       coffea=${release} \
       vector xgboost \

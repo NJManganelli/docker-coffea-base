@@ -24,7 +24,7 @@ RUN mamba install --yes \
       python=${PYTHON_VERSION} \
       ca-policy-lcg \
       xrootd \
-      "uproot>=4.0.8" \
+      "uproot>=5.2.1" \
       numpy \
       coffea=${release} \
       vector xgboost \
@@ -36,9 +36,9 @@ RUN mamba install --yes \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
       --extra-index-url https://google-coral.github.io/py-repo/ \
-      fastjet==3.4.0.1 \
+      fastjet==3.4.1.3 \
       tritonclient[all] \
-      "torch<1.13" \
+      torch \
       tflite-runtime \
       onnxruntime \
      && pip install --no-cache-dir \
