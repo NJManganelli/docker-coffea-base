@@ -1,18 +1,25 @@
-
 import awkward as ak
 import hist
+import gzip
+import json
+from distributed import Client
 from coffea import processor
 from coffea.nanoevents.methods import candidate
 from coffea.nanoevents import NanoEventsFactory, BaseSchema
+from coffea.dataset_tools import apply_to_fileset, preprocess
 
 fileset = {
-    'DoubleMuon': [
-        'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/Run2012B_DoubleMuParked.root',
-        'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/Run2012C_DoubleMuParked.root',
-    ],
-    'ZZ to 4mu': [
-        'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/ZZTo4mu.root'
-    ]
+    'DoubleMuon': {
+        'files': {
+            'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/Run2012B_DoubleMuParked.root': {"object_path": "Events"},
+            'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/Run2012C_DoubleMuParked.root': {"object_path": "Events"},
+        }
+    },
+    'ZZ to 4mu': {
+        'files': {
+            'root://eospublic.cern.ch//eos/root-eos/cms_opendata_2012_nanoaod/ZZTo4mu.root': {"object_path": "Events"}
+        }
+    }
 }
 
 class MyProcessor(processor.ProcessorABC):
@@ -34,7 +41,7 @@ class MyProcessor(processor.ProcessorABC):
         )
 
         h_mass = (
-            hist.Hist.new
+            hist.dask.Hist.new
             .StrCat(["opposite", "same"], name="sign")
             .Log(1000, 0.2, 200., name="mass", label="$m_{\mu\mu}$ [GeV]")
             .Int64()
@@ -51,7 +58,7 @@ class MyProcessor(processor.ProcessorABC):
 
         return {
             dataset: {
-                "entries": len(events),
+                "entries": ak.num(events, axis=0),
                 "mass": h_mass,
             }
         }
@@ -60,12 +67,15 @@ class MyProcessor(processor.ProcessorABC):
         pass
 
 def test_processor_dimu_mass():
-    iterative_run = processor.Runner(executor = processor.IterativeExecutor(compression=None),
-                                     schema=BaseSchema,
-                                     maxchunks=10
-                                     )
-    out = iterative_run(fileset,
-                        treename="Events",
-                        processor_instance=MyProcessor(),
-                        )
-    assert out["DoubleMuon"]["entries"] == 1000560
+    
+    with Client() as _:
+        available_fileset, updated_fileset = preprocess(fileset, maybe_step_size=10, skip_bad_files=True)
+
+        computable = apply_to_fileset(
+            MyProcessor(),
+            available_fileset,
+            schemaclass=BaseSchema,
+        )
+    
+        out, = dask.compute(computable)
+        assert out["DoubleMuon"]["entries"] == 1000560
