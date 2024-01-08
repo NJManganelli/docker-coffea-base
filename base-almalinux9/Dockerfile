@@ -27,7 +27,6 @@ RUN mamba install --yes \
       ca-policy-lcg \
       xrootd \
       fsspec \
-      fsspec-xrootd \
       "uproot>=5.2.1" \
       "awkward>=2.5.1" \
       awkward-pandas \
@@ -51,6 +50,7 @@ RUN mamba install --yes \
       torch \
       tflite-runtime \
       onnxruntime \
+      fsspec-xrootd \
      && pip install --no-cache-dir \
       torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
      && pip install --no-cache-dir \
