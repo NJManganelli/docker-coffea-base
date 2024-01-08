@@ -80,7 +80,7 @@ jobs:
         image_dir: ${{ matrix.image_dir }}
         python: ${{ matrix.python }}
       run: |
-        image="coffeateam/coffea-${image_dir}"
+        image="nmangane/coffea-${image_dir}"
 
         tag="${image}:${release}-py${python}"
         tags=${image}:latest-py${python},$tag
