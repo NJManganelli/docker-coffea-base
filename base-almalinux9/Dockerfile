@@ -34,7 +34,7 @@ RUN mamba install --yes \
       "dask[array]>=2023.12.1" \
       "dask-awkward>=2024.1.0" \
       "dask-histogram>=2023.10.0" \
-      pygraphviz \ #graphviz will only put utilities in Library, not install for python
+      pygraphviz \
       numpy \
       coffea=${release} \
       vector xgboost \
