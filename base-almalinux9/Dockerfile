@@ -34,7 +34,6 @@ RUN mamba install --yes \
       "dask[array]>=2023.12.1" \
       "dask-awkward>=2024.1.0" \
       "dask-histogram>=2023.10.0" \
-      pygraphviz \
       numpy \
       coffea=${release} \
       vector xgboost \
@@ -52,6 +51,7 @@ RUN mamba install --yes \
       tflite-runtime \
       onnxruntime \
       fsspec-xrootd \
+      graphviz \
      && pip install --no-cache-dir \
       torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
      && pip install --no-cache-dir \
