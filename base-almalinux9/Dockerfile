@@ -16,6 +16,7 @@ RUN yum -y update \
      && yum clean all
 
 # XRootD + CA + VOMS + Coffea
+# graphviz both in conda and pip, former exclusively for CLI tools, latter exclusively for python importable package
 RUN mamba install --yes \
       -c conda-forge -c pytorch \
       python=${PYTHON_VERSION} \
@@ -34,6 +35,7 @@ RUN mamba install --yes \
       "dask[array]>=2023.12.1" \
       "dask-awkward>=2024.1.0" \
       "dask-histogram>=2023.10.0" \
+      graphviz \ 
       numpy \
       coffea=${release} \
       vector xgboost \
