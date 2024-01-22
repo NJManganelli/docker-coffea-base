@@ -18,7 +18,7 @@ RUN yum -y update \
 # XRootD + CA + VOMS + Coffea
 # graphviz both in conda and pip, former exclusively for CLI tools, latter exclusively for python importable package
 RUN mamba install --yes \
-      -c conda-forge -c pytorch \
+      -c pyg -c conda-forge -c pytorch \
       python=${PYTHON_VERSION} \
       gxx \
       voms \
@@ -43,9 +43,7 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
-      "pytorch-cpu>=2.1.0" \
-     && mamba install --yes -c pyg \
-      pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
+      "pytorch>=2.1.0" cpuonly pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
      && mamba clean -y --all \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
