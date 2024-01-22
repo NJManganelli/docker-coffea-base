@@ -43,17 +43,18 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
-      "pytorch>=2.1.0" cpuonly pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
-     && mamba clean -y --all \
+      # "pytorch>=2.1.0" cpuonly pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
       --extra-index-url https://google-coral.github.io/py-repo/ \
       fastjet==3.4.1.3 \
       tritonclient[all] \
-      # torch \
+      torch \
       tflite-runtime \
       onnxruntime \
-      fsspec-xrootd
+      fsspec-xrootd \
+     && mamba install --yes -c pyg pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
+     && mamba clean -y --all \
      #  graphviz \
      # && pip install --no-cache-dir \
      #  torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
