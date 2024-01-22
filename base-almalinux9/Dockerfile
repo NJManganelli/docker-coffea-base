@@ -18,7 +18,7 @@ RUN yum -y update \
 # XRootD + CA + VOMS + Coffea
 # graphviz both in conda and pip, former exclusively for CLI tools, latter exclusively for python importable package
 RUN mamba install --yes \
-      -c pyg -c conda-forge -c pytorch \
+      -c pyg -c conda-forge -c pytorch -c nvidia\
       python=${PYTHON_VERSION} \
       gxx \
       voms \
@@ -43,7 +43,8 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
-      # "pytorch>=2.1.0" cpuonly pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
+      "pytorch-cuda>=2.1.0" pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
+     && mamba clean -y --all \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
       --extra-index-url https://google-coral.github.io/py-repo/ \
@@ -53,8 +54,6 @@ RUN mamba install --yes \
       tflite-runtime \
       onnxruntime \
       fsspec-xrootd \
-     && mamba install --yes -c pyg pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
-     && mamba clean -y --all \
      #  graphviz \
      # && pip install --no-cache-dir \
      #  torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
