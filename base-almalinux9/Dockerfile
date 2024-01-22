@@ -18,7 +18,7 @@ RUN yum -y update \
 # XRootD + CA + VOMS + Coffea
 # graphviz both in conda and pip, former exclusively for CLI tools, latter exclusively for python importable package
 RUN mamba install --yes \
-      -c conda-forge -c pytorch \
+      -c pyg -c conda-forge -c pytorch \
       python=${PYTHON_VERSION} \
       gxx \
       voms \
@@ -35,7 +35,7 @@ RUN mamba install --yes \
       "dask[array]>=2023.12.1" \
       "dask-awkward>=2024.1.0" \
       "dask-histogram>=2023.10.0" \
-      graphviz \ 
+      python-graphviz \ 
       numpy \
       coffea=${release} \
       vector xgboost \
@@ -43,21 +43,23 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
+      "pytorch>=2.1.0" \
+      pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
      && mamba clean -y --all \
      && pip install --no-cache-dir \
       --extra-index-url https://download.pytorch.org/whl/cpu/ \
       --extra-index-url https://google-coral.github.io/py-repo/ \
       fastjet==3.4.1.3 \
       tritonclient[all] \
-      torch \
+      # torch \
       tflite-runtime \
       onnxruntime \
-      fsspec-xrootd \
-      graphviz \
-     && pip install --no-cache-dir \
-      torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
-     && pip install --no-cache-dir \
-      torch-geometric
+      fsspec-xrootd
+     #  graphviz \
+     # && pip install --no-cache-dir \
+     #  torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
+     # && pip install --no-cache-dir \
+     #  torch-geometric
 
 # Make a symbolic link between installation /opt/conda/etc/grid-security and actual directory /etc/grid-security
 RUN ln -s /usr/local/etc/grid-security /etc/grid-security
