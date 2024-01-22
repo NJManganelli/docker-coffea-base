@@ -37,7 +37,7 @@ RUN mamba install --yes \
       "dask-histogram>=2023.10.0" \
       python-graphviz \ 
       numpy \
-      coffea=${release} \
+      "coffea[rucio,servicex,dev]=${release}" \
       vector xgboost \
       lz4 python-xxhash zstandard h5py \
       pytables \
@@ -53,7 +53,7 @@ RUN mamba install --yes \
       torch \
       tflite-runtime \
       onnxruntime \
-      fsspec-xrootd \
+      fsspec-xrootd
      #  graphviz \
      # && pip install --no-cache-dir \
      #  torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cpu.html \
