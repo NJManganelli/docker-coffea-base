@@ -43,7 +43,7 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
-      "pytorch>=2.1.0" \
+      "pytorch-cpu>=2.1.0" \
      && mamba install --yes -c pyg \
       pyg pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
      && mamba clean -y --all \
