@@ -43,7 +43,6 @@ RUN mamba install --yes \
       pytables \
       python-rapidjson geventhttpclient \
       brotli nomkl \
-      "pytorch>=2.1.0" pyg \
       # pytorch-scatter pytorch-sparse pytorch-cluster pytorch-spline-conv \
      && mamba clean -y --all \
      && pip install --no-cache-dir \
@@ -51,15 +50,14 @@ RUN mamba install --yes \
       --extra-index-url https://google-coral.github.io/py-repo/ \
       fastjet==3.4.1.3 \
       tritonclient[all] \
-      # torch \
+      torch \
       tflite-runtime \
       onnxruntime \
       fsspec-xrootd \
      && pip install --no-cache-dir \
-      torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.1.0+cpu.html
-     # && pip install --no-cache-dir \
-     #  torch-geometric
-     #  graphviz \
+      torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.1.0+cpu.html \
+     && pip install --no-cache-dir \
+      torch-geometric
 
 # Make a symbolic link between installation /opt/conda/etc/grid-security and actual directory /etc/grid-security
 RUN ln -s /usr/local/etc/grid-security /etc/grid-security
