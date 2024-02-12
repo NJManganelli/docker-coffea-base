@@ -50,6 +50,7 @@ RUN mamba install --yes \
       --extra-index-url https://google-coral.github.io/py-repo/ \
       fastjet==3.4.1.3 \
       tritonclient[all] \
+      trino \
       torch \
       tflite-runtime \
       onnxruntime \
