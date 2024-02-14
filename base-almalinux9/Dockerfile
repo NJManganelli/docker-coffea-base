@@ -55,6 +55,7 @@ RUN mamba install --yes \
       tflite-runtime \
       onnxruntime \
       fsspec-xrootd \
+      py-spy \
      && pip install --no-cache-dir \
       torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.1.0+cpu.html \
      && pip install --no-cache-dir \
