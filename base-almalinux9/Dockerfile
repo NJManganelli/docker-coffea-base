@@ -56,13 +56,13 @@ RUN mamba install --yes \
       onnxruntime \
       servicex-clients \
       py-spy \
+      fsspec-xrootd \
+      s3fs \
+      minio \
      && pip install --no-cache-dir \
       torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.1.0+cpu.html \
      && pip install --no-cache-dir \
       torch-geometric
-      # fsspec-xrootd \
-      # s3fs \
-      # minio \
 
 # Make a symbolic link between installation /opt/conda/etc/grid-security and actual directory /etc/grid-security
 RUN ln -s /usr/local/etc/grid-security /etc/grid-security
